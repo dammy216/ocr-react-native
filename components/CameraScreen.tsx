@@ -1,18 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
-import { processImage } from "../controllers/cloudVisionApi"; // API処理をimport
+import { processImage } from "../controllers/cloudVisionApi"; 
 
 const CameraScreen = () => {
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef<CameraView>(null);
+  // const [importText, setImportText] = useState<string | undefined>('')
+  const cameraRef = useRef<CameraView | null>(null);
 
-  // 写真撮影後にAPI処理を呼び出す
+  // 写真撮影後にvision API処理を呼び出す
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
       if (!photo) return;
-      await processImage(photo.uri); // API処理を呼び出し
+      const result = await processImage(photo.uri); // API処理を呼び出し
+      alert(result);
     }
   };
   
@@ -21,7 +23,7 @@ const CameraScreen = () => {
     return <Text>Loading...</Text>;
   }
 
-  // カメラ権限はまだ付与されていない
+  // カメラの権限付与をリクエスト
   if (!permission.granted) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
@@ -35,7 +37,7 @@ const CameraScreen = () => {
       <CameraView style={{ flex: 1 }} ref={cameraRef}>
         <TouchableOpacity
           style={styles.captureButton}
-          onPress={handleCapture} // 写真撮影
+          onPress={handleCapture}
         >
           <Text style={styles.captureText}>撮影</Text>
         </TouchableOpacity>

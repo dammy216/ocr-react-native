@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Google Vision APIのレスポンス型を定義
 interface VisionResponse {
@@ -10,34 +10,42 @@ interface VisionResponse {
 }
 
 // 画像をGoogle Vision APIに送信してOCR処理を行う
-export const processImage = async (uri: string): Promise<void> => {
+export const processImage = async (
+  uri: string
+): Promise<string | undefined> => {
   try {
     // 画像をbase64エンコード
     const base64 = await fetch(uri);
     const imageBlob = await base64.blob();
-    const imageBase64 = await new Promise<string>((resolve) => {
+
+    const imageBase64 = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result?.toString().split(',')[1] ?? '');
+      reader.onloadend = () => {
+        if (reader.result) {
+          resolve((reader.result as string).split(",")[1] ?? "");
+        } else {
+          reject(new Error("Base64 encoding failed"));
+        }
+      };
       reader.readAsDataURL(imageBlob);
     });
 
     // Google Cloud Vision APIに画像を送信
     const response = await axios.post<VisionResponse>(
-      `https://vision.googleapis.com/v1/images:annotate?key=${process.env.GOOGLE_VISION_API_KEY}`,
+      `https://vision.googleapis.com/v1/images:annotate?key=`,
       {
         requests: [
           {
             image: { content: imageBase64 },
-            features: [{ type: 'DOCUMENT_TEXT_DETECTION' }],
+            features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
           },
         ],
       }
     );
 
-    const text = response.data.responses[0]?.textAnnotations[0]?.description;
-    console.log('OCR Result:', text);
+    return response.data.responses[0]?.textAnnotations[0]?.description;
     // OCR結果を表示または処理する
   } catch (error) {
-    console.error("Error processing image:", error);
+    console.error("エラーだみょーん", error);
   }
 };

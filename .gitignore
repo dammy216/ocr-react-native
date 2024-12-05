@@ -36,3 +36,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# APIキー
+ocr-react-native-443812-45faeacc38a6.json
