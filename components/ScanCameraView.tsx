@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ScanCameraView = () => {
   const [permission, requestPermission] = useCameraPermissions();
-  // const [importText, setImportText] = useState<string | undefined>('')
   const cameraRef = useRef<CameraView | null>(null);
 
   // 写真撮影後にvision API処理を呼び出す
