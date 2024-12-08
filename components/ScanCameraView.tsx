@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
-import { processImage } from "../controllers/cloudVisionApi"; 
+import { processImage } from "../controllers/cloudVisionApi";
 
-const CameraScreen = () => {
+const ScanCameraView = () => {
   const [permission, requestPermission] = useCameraPermissions();
   // const [importText, setImportText] = useState<string | undefined>('')
   const cameraRef = useRef<CameraView | null>(null);
@@ -17,7 +17,7 @@ const CameraScreen = () => {
       alert(result);
     }
   };
-  
+
   // カメラの許可をリクエスト
   if (!permission) {
     return <Text>Loading...</Text>;
@@ -35,10 +35,7 @@ const CameraScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <CameraView style={{ flex: 1 }} ref={cameraRef}>
-        <TouchableOpacity
-          style={styles.captureButton}
-          onPress={handleCapture}
-        >
+        <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
           <Text style={styles.captureText}>撮影</Text>
         </TouchableOpacity>
       </CameraView>
@@ -54,7 +51,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignSelf: "center",
     position: "absolute",
-    bottom: 50,
+    bottom: 64,
   },
   captureText: {
     fontSize: 20,
@@ -63,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CameraScreen;
+export default ScanCameraView;

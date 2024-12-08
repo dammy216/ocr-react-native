@@ -46,6 +46,7 @@ export const processImage = async (
     return response.data.responses[0]?.textAnnotations[0]?.description;
     // OCR結果を表示または処理する
   } catch (error) {
-    console.error("エラーだみょーん", error);
+    console.error("エラーメッセージ", error);
+    return '取り込みに失敗しました';
   }
 };
