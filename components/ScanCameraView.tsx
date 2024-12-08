@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { processImage } from "../controllers/cloudVisionApi";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ScanCameraView = () => {
   const [permission, requestPermission] = useCameraPermissions();
@@ -12,9 +13,18 @@ const ScanCameraView = () => {
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      if (!photo) return;
-      const result = await processImage(photo.uri); // API処理を呼び出し
-      alert(result);
+
+      if (photo) {
+        const result = await processImage(photo.uri); // API処理を呼び出し
+
+        if (result) {
+          //keyはuuidとかでつけたい
+          await AsyncStorage.setItem('@photo_result', result);
+          alert("読み込みに成功しました");
+        } else {
+          alert("読み込みに失敗しました");
+        }
+      }
     }
   };
 

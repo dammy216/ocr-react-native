@@ -3,20 +3,25 @@ import * as DocumentPicker from "expo-document-picker";
 import { processImage } from "../controllers/cloudVisionApi";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ImportFileView = () => {
   // pdfから読み込む
   const handleGetPdf = async () => {
-    const document: DocumentPicker.DocumentPickerResult =await DocumentPicker.getDocumentAsync({type: "application/pdf"});
+    const document: DocumentPicker.DocumentPickerResult = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
 
     if (!document.canceled) {
-      const uri = document.assets[0].uri;
+      const { uri } = document.assets[0];
 
       if (uri) {
         const result = await processImage(uri);
 
         if (result) {
-          alert(result);
+          //keyはuuidとかでつけたい
+          await AsyncStorage.setItem('@photo_result', result);
+          alert("読み込みに成功しました");
+        } else {
+          alert("読み込みに失敗しました");
         }
       }
     }
@@ -26,21 +31,25 @@ const ImportFileView = () => {
   const handleGetImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (!permissionResult.granted){
+    if (!permissionResult.granted) {
       alert("写真フォルダへのアクセス権限が必要です");
       return;
     }
 
     const image: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true });
 
-    if(!image.canceled){
-      const uri = image.assets[0].uri;
+    if (!image.canceled) {
+      const { uri } = image.assets[0];
 
       if (uri) {
         const result = await processImage(uri);
 
         if (result) {
-          alert(result);
+          //keyはuuidとかでつけたい
+          await AsyncStorage.setItem('@photo_result', result);
+          alert("読み込みに成功しました");
+        } else {
+          alert("読み込みに失敗しました");
         }
       }
     }
@@ -50,12 +59,12 @@ const ImportFileView = () => {
     <View style={styles.container}>
       <Text style={styles.title}>ファイルを選択してください</Text>
       <View style={styles.buttonContainer}>
-      <TouchableOpacity onPress={handleGetPdf} style={styles.importPdfButton}>
-        <Text>PDFから読み込む</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleGetImage} style={styles.importImageButton}>
-        <Text>画像から読み込む</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleGetPdf} style={styles.importPdfButton}>
+          <Text>PDFから読み込む</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleGetImage} style={styles.importImageButton}>
+          <Text>画像から読み込む</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -70,12 +79,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 200,
-    },
+  },
   buttonContainer: {
-    flexDirection: "row", 
-    justifyContent: "center", 
-    alignItems: "center", 
-    position: "absolute", 
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
     gap: 40,
     left: 0,
     right: 0,

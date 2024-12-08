@@ -47,6 +47,5 @@ export const processImage = async (
     // OCR結果を表示または処理する
   } catch (error) {
     console.error("エラーメッセージ", error);
-    return '取り込みに失敗しました';
   }
 };
