@@ -14,8 +14,7 @@ const ScanCameraView = () => {
       const photo = await cameraRef.current.takePictureAsync();
 
       if (photo) {
-        const result = await processImage(photo.uri); // API処理を呼び出し
-
+        const result = await processImage(photo.uri);
         if (result) {
           //keyはuuidとかでつけたい
           await AsyncStorage.setItem('@photo_result', result);
