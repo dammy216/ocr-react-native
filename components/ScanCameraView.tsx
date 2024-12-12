@@ -2,11 +2,27 @@ import React, { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { processImage } from "../controllers/cloudVisionApi";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { addTextData } from "@/controllers/myApiRequest";
 
 const ScanCameraView = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // カメラを起動
+      if (cameraRef.current) {
+        cameraRef.current.resumePreview();
+      }
+      // カメラを停止
+      return () => {
+        if (cameraRef.current) {
+          cameraRef.current.pausePreview();
+        }
+      };
+    }, [])
+  );
 
   // 写真撮影後にvision API処理を呼び出す
   const handleCapture = async () => {
@@ -16,8 +32,8 @@ const ScanCameraView = () => {
       if (photo) {
         const result = await processImage(photo.uri);
         if (result) {
-          //keyはuuidとかでつけたい
-          await AsyncStorage.setItem('@photo_result', result);
+          const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();
+          await addTextData(sanitizedData);
           alert("読み込みに成功しました");
         } else {
           alert("読み込みに失敗しました");

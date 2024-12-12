@@ -3,8 +3,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { processImage } from "../controllers/cloudVisionApi";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { ScanData } from "@/types/textData";
-import { v4 as uuid } from "uuid";
+import { addTextData } from "@/controllers/myApiRequest";
 
 const ImportFileView = () => {
   // pdfから読み込む
@@ -18,7 +17,8 @@ const ImportFileView = () => {
         const result = await processImage(uri);
 
         if (result) {
-
+          const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();
+          await addTextData(sanitizedData);
           alert("読み込みに成功しました");
         } else {
           alert("読み込みに失敗しました");
@@ -45,7 +45,8 @@ const ImportFileView = () => {
         const result = await processImage(uri);
 
         if (result) {
-
+          const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();
+          await addTextData(sanitizedData);
           alert("読み込みに成功しました");
         } else {
           alert("読み込みに失敗しました");
@@ -93,11 +94,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.7)",
     borderRadius: 50,
     padding: 20,
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   },
   importImageButton: {
     backgroundColor: "rgba(255,255,255,0.7)",
     borderRadius: 50,
     padding: 20,
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   },
 });
 export default ImportFileView;
