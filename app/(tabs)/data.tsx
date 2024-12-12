@@ -1,9 +1,13 @@
-import React from 'react'
+import DataView from '@/components/DataView';
+import React from 'react';
+import { View } from 'react-native';
 
 const dataIndex = () => {
   return (
-    <div>data</div>
-  )
-}
+    <View style={{ flex: 1 }}>
+      <DataView />
+    </View>
+  );
+};
 
-export default dataIndex
+export default dataIndex;

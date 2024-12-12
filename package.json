@@ -2,8 +2,10 @@
   "name": "ocr-react-native",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "start": "expo start",
+    "dev": "nodemon server/server.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -16,9 +18,11 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "axios": "^1.7.9",
+    "cors": "^2.8.5",
     "expo": "^52.0.0",
     "expo-blur": "~14.0.1",
     "expo-camera": "~16.0.9",
@@ -36,6 +40,10 @@
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.4",
     "expo-web-browser": "~14.0.1",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.8.4",
+    "nodemon": "^3.1.7",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.3",
@@ -47,7 +55,7 @@
     "react-native-vision-camera": "^4.6.3",
     "react-native-web": "~0.19.13",
     "react-native-webview": "^13.12.5",
-    "@react-native-async-storage/async-storage": "1.23.1"
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

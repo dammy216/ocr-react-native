@@ -10,9 +10,7 @@ interface VisionResponse {
 }
 
 // 画像をGoogle Vision APIに送信してOCR処理を行う
-export const processImage = async (
-  uri: string
-): Promise<string | undefined> => {
+export const processImage = async (uri: string): Promise<string | undefined> => {
   try {
     // 画像をbase64エンコード
     const base64 = await fetch(uri);

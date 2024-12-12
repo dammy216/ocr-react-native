@@ -3,7 +3,8 @@ import * as DocumentPicker from "expo-document-picker";
 import { processImage } from "../controllers/cloudVisionApi";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ScanData } from "@/types/textData";
+import { v4 as uuid } from "uuid";
 
 const ImportFileView = () => {
   // pdfから読み込む
@@ -17,8 +18,7 @@ const ImportFileView = () => {
         const result = await processImage(uri);
 
         if (result) {
-          //keyはuuidとかでつけたい
-          await AsyncStorage.setItem('@photo_result', result);
+
           alert("読み込みに成功しました");
         } else {
           alert("読み込みに失敗しました");
@@ -45,8 +45,7 @@ const ImportFileView = () => {
         const result = await processImage(uri);
 
         if (result) {
-          //keyはuuidとかでつけたい
-          await AsyncStorage.setItem('@photo_result', result);
+
           alert("読み込みに成功しました");
         } else {
           alert("読み込みに失敗しました");
