@@ -1,9 +1,10 @@
 import React from "react";
 import * as DocumentPicker from "expo-document-picker";
-import { processImage } from "../controllers/cloudVisionApi";
+import { processOCR } from "../shared/externalApiRequest";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { addTextData } from "@/controllers/myApiRequest";
+import { addTextData } from "@/shared/myApiRequest";
+import { ImageEditor } from "expo-image-editor";
 
 const ImportFileView = () => {
   // pdfから読み込む
@@ -14,7 +15,7 @@ const ImportFileView = () => {
       const { uri } = document.assets[0];
 
       if (uri) {
-        const result = await processImage(uri);
+        const result = await processOCR(uri);
 
         if (result) {
           const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();
@@ -42,7 +43,7 @@ const ImportFileView = () => {
       const { uri } = image.assets[0];
 
       if (uri) {
-        const result = await processImage(uri);
+        const result = await processOCR(uri);
 
         if (result) {
           const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();

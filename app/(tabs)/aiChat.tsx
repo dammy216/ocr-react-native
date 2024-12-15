@@ -1,13 +1,13 @@
-import DataView from '@/components/DataView';
+import AiChatView from '@/components/AiChatView';
 import React from 'react';
 import { View } from 'react-native';
 
-const DataIndex = () => {
+const AiChatIndex = () => {
   return (
     <View style={{ flex: 1 }}>
-      <DataView />
+      <AiChatView />
     </View>
   );
 };
 
-export default DataIndex;
+export default AiChatIndex;
