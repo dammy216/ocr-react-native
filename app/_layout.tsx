@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 export default function RootLayout() {
 
@@ -17,7 +18,7 @@ export default function RootLayout() {
             headerShown: true,
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
-                <Text style={styles.headerTitle}>OCR SCANNER</Text>
+                <Text style={styles.headerTitle}>AI-OCR SCANNER</Text>
                 <Ionicons name="scan" size={24} color="#fff" />
               </View>
             ),
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
   },
   controlButton: {
     alignSelf: 'flex-end',
+    marginRight: Platform.OS === 'web' ? 24 : 0,
   },
   optionsContainer: {
     marginTop: 40,

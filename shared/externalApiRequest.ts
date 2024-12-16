@@ -1,5 +1,4 @@
 import axios from "axios";
-import e, { text } from "express";
 
 // Google Vision APIのレスポンス型を定義
 type VisionResponse = {
