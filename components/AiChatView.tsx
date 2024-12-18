@@ -44,6 +44,18 @@ const AiChatView = () => {
         };
 
         setMessages((previousMessages) => GiftedChat.append(previousMessages, [aiMessage]));
+      } else {
+        const errorMessage: IMessage = {
+          _id: uuid.v4(),
+          text: 'エラーが発生しました。もう一度お試しください。',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'Dammy',
+          },
+        };
+
+        setMessages((previousMessages) => GiftedChat.append(previousMessages, [errorMessage]));
       }
     } catch (error) {
       const errorMessage: IMessage = {

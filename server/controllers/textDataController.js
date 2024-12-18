@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import TextSchema from '../../models/TextSchema.js';
 import cors from 'cors';
+import pdfToImage from '../pdfToImage.js';
 
 const app = express();
 
@@ -56,6 +57,17 @@ app.delete('/api/v1/data/delete/:id', async (req, res) => {
     res.status(200).json(deleteText);
   } catch (error) {
     console.log(error);
+  }
+});
+
+//pdfを画像に変換
+app.post('/api/v1/pdfToImage', async (req, res) => {
+  try {
+    const imageUri = await pdfToImage(req.body.pdfUri);
+    res.status(200).json(imageUri);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("画像変換に失敗しました");
   }
 });
 

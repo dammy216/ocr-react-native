@@ -29,3 +29,14 @@ export const deleteTextData = async (id: string): Promise<any> => {
     console.log("テキストデータの削除に失敗しました", error);
   }
 };
+
+// pfdを画像に変換
+export const pdfToImage = async (pdfUri: string): Promise<string | null> => {
+  try {
+    const response = await axios.post("http://192.168.32.197:3000/api/v1/pdfToImage", { pdfUri });
+    return response ? response.data : null;
+  } catch (error) {
+    console.log("pdfを画像に変換に失敗しました", error);
+    return null;
+  }
+};

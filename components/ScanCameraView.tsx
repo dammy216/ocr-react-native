@@ -5,6 +5,7 @@ import { processOCR } from "../shared/externalApiRequest";
 import { useFocusEffect } from "@react-navigation/native";
 import { addTextData } from "@/shared/myApiRequest";
 import { ImageEditor } from "expo-image-editor";
+import {FontAwesome } from "@expo/vector-icons";
 
 const ScanCameraView = () => {
   const [permission, requestPermission] = useCameraPermissions();
@@ -71,8 +72,8 @@ const ScanCameraView = () => {
   return (
     <View style={{ flex: 1 }}>
       <CameraView style={{ flex: 1 }} ref={cameraRef}>
-        <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
-          <Text style={styles.captureText}>撮影</Text>
+        <TouchableOpacity style={styles.scanButton} onPress={handleCapture}>
+          <FontAwesome name="circle-thin" size={80} color="white" />
         </TouchableOpacity>
         <ImageEditor
           imageUri={capturedPhotoUri}
@@ -88,11 +89,8 @@ const ScanCameraView = () => {
 };
 
 const styles = StyleSheet.create({
-  captureButton: {
+  scanButton: {
     flex: 0,
-    backgroundColor: "rgba(255,255,255,0.7)",
-    borderRadius: 50,
-    padding: 20,
     alignSelf: "center",
     position: "absolute",
     bottom: 64,

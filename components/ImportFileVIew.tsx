@@ -1,9 +1,10 @@
 import React from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { processOCR } from "../shared/externalApiRequest";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { addTextData } from "@/shared/myApiRequest";
+import { addTextData, pdfToImage } from "@/shared/myApiRequest";
+import * as FileSystem from "expo-file-system";
 import { ImageEditor } from "expo-image-editor";
 
 const ImportFileView = () => {
@@ -12,11 +13,28 @@ const ImportFileView = () => {
     const document: DocumentPicker.DocumentPickerResult = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
 
     if (!document.canceled) {
-      const { uri } = document.assets[0];
+      let pdfUri = '';
+ 
+      if (Platform.OS === 'web') {
+        //web版はパスを取得できないのでどうしよう
+        alert("web版は対応してません");
+        return;
+      } else if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        const fileInfo: FileSystem.FileInfo = await FileSystem.getInfoAsync(document.assets[0].uri);
+        pdfUri = fileInfo.uri;
+        alert("pdfのuriを取得しました");
+      }
 
-      if (uri) {
-        const result = await processOCR(uri);
+      if(!pdfUri) {
+        alert("pdfのuriを取得できません");
+        return;
+      }
+      //pdfのuriをして画像のuriを受け取る
+      const imageUri = await pdfToImage(pdfUri);
 
+      if (imageUri) {
+        const result = await processOCR(imageUri);
+        alert("画像変換に成功しました");
         if (result) {
           const sanitizedData = result.replace(/[^\S\u3000]+/g, " ").trim();
           await addTextData(sanitizedData);
@@ -24,7 +42,11 @@ const ImportFileView = () => {
         } else {
           alert("読み込みに失敗しました");
         }
+      } else{
+        alert("画像変換に失敗しました");
       }
+    } else {
+      alert("キャンセルされました");
     }
   };
 
